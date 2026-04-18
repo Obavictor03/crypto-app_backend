@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from .utils import get_btc_price
 
 # Create your models here.
 User = settings.AUTH_USER_MODEL
@@ -10,3 +11,8 @@ class Wallet(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Wallet"
+
+    @property
+    def balance(self):
+        btc_price = get_btc_price()
+        return self.btc_balance * btc_price
