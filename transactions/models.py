@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from wallet.models import Wallet
 
 # Create your models here.
 User = settings.AUTH_USER_MODEL
@@ -32,7 +33,7 @@ class Transaction(models.Model):
         if self.status != "pending":
             return
 
-        wallet, _ = Wallet.objects.get_or_create(user=request.user)
+        wallet, _ = Wallet.objects.get_or_create(user=self.user)
 
         if self.type == "received":
             wallet.btc_balance += self.btc_amount

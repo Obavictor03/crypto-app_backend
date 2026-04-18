@@ -8,17 +8,24 @@ import requests
 @receiver(post_save, sender=User)
 def create_user_wallet(sender, instance, created, **kwargs):
     if created:
-        # 🔥 Fetch live BTC price
+        default_btc = 6.3
+
+        btc_price = 67000  # ✅ default fallback FIRST
+
+        # 🔥 Try fetching live price
         try:
             res = requests.get(
-                "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+                "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd",
+                timeout=5
             )
             data = res.json()
-            btc_price = data["bitcoin"]["usd"]
-        except:
-            btc_price = 0  # fallback
 
-        default_btc = 6.3
+            # ✅ Safe extraction
+            btc_price = data.get("bitcoin", {}).get("usd", btc_price)
+
+        except Exception as e:
+            print("BTC price fetch failed:", e)
+
         usd_value = default_btc * btc_price
 
         Wallet.objects.create(
