@@ -39,7 +39,7 @@ class Transaction(models.Model):
             wallet.btc_balance += self.btc_amount
 
         elif self.type == "sent":
-            wallet.balance += self.btc_amount * self.live_price
+            pass  # No action needed since balance was already deducted at request time
 
         wallet.save()
 

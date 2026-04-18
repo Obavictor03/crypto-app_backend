@@ -6,7 +6,6 @@ User = settings.AUTH_USER_MODEL
 
 class Wallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='wallet')
-    balance = models.FloatField(default=0)  # Starting balance for testing
     btc_balance = models.FloatField(default=0)  # Starting BTC balance for testing
 
     def __str__(self):

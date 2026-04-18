@@ -19,18 +19,11 @@ class DepositBTCView(APIView):
 
         wallet, _ = Wallet.objects.get_or_create(user=request.user)
 
-        if wallet.balance < amount:
-            return Response(
-                {"error": "Insufficient funds"},
-                status=400
-            )
+        
 
         price = get_btc_price()
         btc_amount = amount / price
 
-        # ✅ Update wallet
-        wallet.balance -= amount
-        wallet.save()
 
 
         # Only create transaction (NO wallet update)
