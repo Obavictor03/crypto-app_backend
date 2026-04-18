@@ -1,0 +1,19 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <h2>Add BTC to Selected Wallets</h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    {% for wallet in wallets %}
+      <input type="hidden" name="_selected_action" value="{{ wallet.pk }}">
+      <p>{{ wallet.user }} (Current BTC: {{ wallet.btc_balance }})</p>
+    {% endfor %}
+
+    <button type="submit" name="apply">Apply</button>
+  </form>
+
+{% endblock %}
