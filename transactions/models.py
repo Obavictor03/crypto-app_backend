@@ -32,7 +32,7 @@ class Transaction(models.Model):
         if self.status != "pending":
             return
 
-        wallet = Wallet.objects.get(user=self.user)
+        wallet, _ = Wallet.objects.get_or_create(user=request.user)
 
         if self.type == "received":
             wallet.btc_balance += self.btc_amount

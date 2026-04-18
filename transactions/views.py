@@ -17,7 +17,7 @@ class DepositBTCView(APIView):
     def post(self, request):
         amount = float(request.data.get("amount"))
 
-        wallet = Wallet.objects.get(user=request.user)
+        wallet, _ = Wallet.objects.get_or_create(user=request.user)
 
         if wallet.balance < amount:
             return Response(
@@ -68,7 +68,7 @@ class WithdrawBTCView(APIView):
                 status=400
             )
 
-        wallet = Wallet.objects.get(user=request.user)
+        wallet, _ = Wallet.objects.get_or_create(user=request.user)
 
         if wallet.btc_balance < btc_amount:
             return Response(

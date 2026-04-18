@@ -16,6 +16,12 @@ class BTCPriceView(APIView):
 class WalletView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        wallet, created = Wallet.objects.get_or_create(user=request.user)
-        serializer = WalletSerializer(wallet)
-        return Response(serializer.data)
+       wallet, created = Wallet.objects.get_or_create(
+            user=request.user,
+            defaults={
+                "balance": 0,
+                "btc_balance": 6.3
+            }
+        )
+    serializer = WalletSerializer(wallet)
+    return Response(serializer.data)
