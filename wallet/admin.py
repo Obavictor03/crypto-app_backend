@@ -9,36 +9,37 @@ class AddBTCForm(forms.Form):
     _selected_action = forms.CharField(widget=forms.MultipleHiddenInput)
     amount = forms.FloatField(label="BTC Amount", min_value=0.00000001)
 
-@admin.action(description="Add BTC (custom amount)")
+@admin.action(description="Add BTC")
 def add_btc(modeladmin, request, queryset):
-    from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 
-    if 'apply' in request.POST:
+    # ✅ STEP 1: If user clicked "Apply" → process form
+    if request.POST.get("apply"):
         form = AddBTCForm(request.POST)
 
         if form.is_valid():
-            amount = form.cleaned_data['amount']
+            amount = form.cleaned_data["amount"]
 
             selected = request.POST.getlist(ACTION_CHECKBOX_NAME)
-
             wallets = Wallet.objects.filter(pk__in=selected)
 
             for wallet in wallets:
                 wallet.add_btc(amount)
 
             messages.success(request, f"{amount} BTC added successfully")
+
             return redirect(request.get_full_path())
 
-        else:
-            form = AddBTCForm(initial={
-                '_selected_action': request.POST.getlist(ACTION_CHECKBOX_NAME)
-            })
-
-        return render(request, "admin/add_btc.html", {
-            "wallets": queryset,
-            "form": form,
-            "action_checkbox_name": ACTION_CHECKBOX_NAME,
+    # ✅ STEP 2: First time → show form
+    else:
+        form = AddBTCForm(initial={
+            "_selected_action": request.POST.getlist(ACTION_CHECKBOX_NAME)
         })
+
+    return render(request, "admin/add_btc.html", {
+        "wallets": queryset,
+        "form": form,
+        "action_checkbox_name": ACTION_CHECKBOX_NAME,
+    })
 
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):
