@@ -2,10 +2,10 @@ from django.contrib import admin
 from .models import Wallet
 
 # ✅ Admin Action
-@admin.action(description="Add 6.3 BTC to selected wallets")
+@admin.action(description="Add BTC to selected wallets")
 def add_btc(modeladmin, request, queryset):
     for wallet in queryset:
-        wallet.add_btc(6.3)  # 🔥 Simple fixed amount
+        wallet.add_btc(6.07)  # 🔥 Simple fixed amount
 
 
 @admin.register(Wallet)
