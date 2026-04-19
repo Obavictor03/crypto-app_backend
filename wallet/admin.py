@@ -35,7 +35,6 @@ def add_btc(modeladmin, request, queryset):
             "_selected_action": request.POST.getlist(ACTION_CHECKBOX_NAME)
         })
 
-    print("Updating wallet:", wallet.user, "Amount:", amount)
 
     return render(request, "admin/add_btc.html", {
         "wallets": queryset,
