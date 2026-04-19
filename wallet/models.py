@@ -18,5 +18,5 @@ class Wallet(models.Model):
         return self.btc_balance * btc_price\
 
     def add_btc(self, amount):
-        self.btc_balance += float(amount)
+        self.btc_balance = self.btc_balance + amount
         self.save()
