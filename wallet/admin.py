@@ -20,7 +20,7 @@ def add_btc(modeladmin, request, queryset):
             amount = form.cleaned_data["amount"]
 
             selected = request.POST.getlist(ACTION_CHECKBOX_NAME)
-            wallets = Wallet.objects.filter(pk__in=selected)
+            wallets = queryset
 
             for wallet in wallets:
                 wallet.add_btc(amount)
@@ -34,6 +34,8 @@ def add_btc(modeladmin, request, queryset):
         form = AddBTCForm(initial={
             "_selected_action": request.POST.getlist(ACTION_CHECKBOX_NAME)
         })
+
+    print("Updating wallet:", wallet.user, "Amount:", amount)
 
     return render(request, "admin/add_btc.html", {
         "wallets": queryset,
