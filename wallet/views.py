@@ -19,7 +19,7 @@ class WalletView(APIView):
     def get(self, request):
         wallet, _ = Wallet.objects.get_or_create(
             user=request.user,
-            defaults={"balance": 0, "btc_balance": 0}
+            defaults={"btc_balance": 0}
         )
 
         serializer = WalletSerializer(wallet)
